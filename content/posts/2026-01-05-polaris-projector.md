@@ -1,7 +1,7 @@
 ---
 title: "Polaris Projector"
 date: 2024-04-01
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+description: "This was my Undergrad Engineering Capstone project."
 ---
 
 
