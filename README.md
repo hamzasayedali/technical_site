@@ -80,3 +80,7 @@ featured:
 **Layout/styling**: `templates/layout.js` has the HTML templates (home, blog index, post); `public/styles.css` has the styles.
 
 Sample posts and the home page currently contain lorem ipsum — replace freely.
+
+## Deployment
+
+Hosted on GitHub Pages at [hamzasayedali.com](https://hamzasayedali.com), served straight from this repo. `.github/workflows/deploy.yml` builds `dist/` and publishes it via GitHub Actions on every push to `main`. `public/CNAME` holds the custom domain, so it's copied into every build automatically — no need to touch GitHub's Pages settings again after the initial setup.
