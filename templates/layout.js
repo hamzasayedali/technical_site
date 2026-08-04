@@ -1,6 +1,6 @@
 function formatDate(dateStr) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
 function layout({ title, description, active, content }) {
@@ -19,6 +19,7 @@ function layout({ title, description, active, content }) {
     <nav>
       <a href="/" class="${active === 'home' ? 'active' : ''}">Home</a>
       <a href="/blog/" class="${active === 'blog' ? 'active' : ''}">Blog</a>
+      <a href="/favorites/" class="${active === 'favorites' ? 'active' : ''}">Favorites</a>
     </nav>
   </header>
   <main>
@@ -111,6 +112,18 @@ ${postList}
   });
 }
 
+function renderFavorites({ contentHtml }) {
+  const content = `    <h1>Favorites</h1>
+${contentHtml}`;
+
+  return layout({
+    title: "Favorites — Hamza's Technical Site",
+    description: 'Blogs, tools, and channels worth checking out.',
+    active: 'favorites',
+    content,
+  });
+}
+
 function renderPost({ post }) {
   const content = `    <article class="post">
       <h1>${post.title}</h1>
@@ -126,4 +139,4 @@ ${post.contentHtml}
   });
 }
 
-module.exports = { layout, renderHome, renderBlogIndex, renderPost, formatDate };
+module.exports = { layout, renderHome, renderBlogIndex, renderFavorites, renderPost, formatDate };

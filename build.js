@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 const { marked } = require('marked');
-const { renderHome, renderBlogIndex, renderPost } = require('./templates/layout');
+const { renderHome, renderBlogIndex, renderFavorites, renderPost } = require('./templates/layout');
 
 const ROOT = __dirname;
 const CONTENT_DIR = path.join(ROOT, 'content');
@@ -101,6 +101,12 @@ function loadHome() {
   return { introHtml: renderMarkdown(content), featuredSlugs: data.featured || [] };
 }
 
+function loadFavorites() {
+  const raw = fs.readFileSync(path.join(CONTENT_DIR, 'favorites.md'), 'utf8');
+  const { content } = matter(raw);
+  return renderMarkdown(content);
+}
+
 function resolveFeaturedPosts(featuredSlugs, posts) {
   return featuredSlugs
     .map((slug) => {
@@ -127,6 +133,7 @@ function build() {
 
   writeFile(path.join(DIST_DIR, 'index.html'), renderHome({ introHtml, posts, featuredPosts }));
   writeFile(path.join(DIST_DIR, 'blog', 'index.html'), renderBlogIndex({ posts }));
+  writeFile(path.join(DIST_DIR, 'favorites', 'index.html'), renderFavorites({ contentHtml: loadFavorites() }));
 
   for (const post of posts) {
     writeFile(path.join(DIST_DIR, 'blog', post.slug, 'index.html'), renderPost({ post }));
