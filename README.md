@@ -77,6 +77,8 @@ featured:
 
 `thumbnail` can be a bare filename (resolved to `/images/<post-slug>/<filename>`, matching the per-post image folders already in use) or an absolute path starting with `/`. A post without a `thumbnail` still shows a featured card, just without an image. An unknown slug in `featured` is skipped with a console warning at build time.
 
+Thumbnails are automatically resized (max 800px wide) and re-encoded as WebP at build time, so source images can stay full-resolution — the original file is never modified, only the compressed copy used for cards. This only applies to `thumbnail`; images placed inline in a post body are copied as-is, so keep those reasonably sized yourself.
+
 **Layout/styling**: `templates/layout.js` has the HTML templates (home, blog index, post); `public/styles.css` has the styles.
 
 Sample posts and the home page currently contain lorem ipsum — replace freely.

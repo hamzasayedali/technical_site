@@ -2,6 +2,7 @@
 title: "Polaris Projector"
 date: 2024-04-01
 description: "Projector that automatically resizes, rotates, and deskews images based on a suite of sensors and computer vision running on a Raspberry Pi."
+thumbnail: fydp_thumbnail.png
 ---
 
 

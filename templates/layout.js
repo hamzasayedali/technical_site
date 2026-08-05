@@ -47,17 +47,23 @@ function renderFeaturedCard(post) {
       </li>`;
 }
 
+function renderPostItem(post) {
+  const thumbnail = post.thumbnail
+    ? `<img src="${post.thumbnail}" alt="${post.title}" class="post-item-thumbnail">`
+    : '';
+
+  return `      <li class="post-item">
+        <div class="post-item-text">
+          <a href="/blog/${post.slug}/">${post.title}</a>
+          <span class="post-date">${formatDate(post.date)}</span>
+          <p>${post.description}</p>
+        </div>
+        ${thumbnail}
+      </li>`;
+}
+
 function renderHome({ introHtml, posts, featuredPosts = [] }) {
-  const postList = posts
-    .slice(0, 5)
-    .map(
-      (post) => `      <li class="post-item">
-        <a href="/blog/${post.slug}/">${post.title}</a>
-        <span class="post-date">${formatDate(post.date)}</span>
-        <p>${post.description}</p>
-      </li>`
-    )
-    .join('\n');
+  const postList = posts.slice(0, 5).map(renderPostItem).join('\n');
 
   const featuredSection = featuredPosts.length
     ? `    <section class="featured-posts">
@@ -89,15 +95,7 @@ ${postList}
 }
 
 function renderBlogIndex({ posts }) {
-  const postList = posts
-    .map(
-      (post) => `      <li class="post-item">
-        <a href="/blog/${post.slug}/">${post.title}</a>
-        <span class="post-date">${formatDate(post.date)}</span>
-        <p>${post.description}</p>
-      </li>`
-    )
-    .join('\n');
+  const postList = posts.map(renderPostItem).join('\n');
 
   const content = `    <h1>Blog</h1>
     <ul class="post-list">

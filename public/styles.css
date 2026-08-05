@@ -92,6 +92,10 @@ h1, h2, h3 {
   gap: 1rem;
 }
 
+.featured-card {
+  min-width: 0;
+}
+
 .featured-card a {
   display: block;
   color: var(--fg);
@@ -140,8 +144,25 @@ h1, h2, h3 {
 }
 
 .post-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 1rem 0;
   border-bottom: 1px solid var(--border);
+}
+
+.post-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-item-thumbnail {
+  flex: 0 0 25%;
+  width: 25%;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .post-item a {

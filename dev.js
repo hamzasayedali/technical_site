@@ -34,9 +34,9 @@ function notifyReload() {
   }
 }
 
-function rebuild() {
+async function rebuild() {
   try {
-    build();
+    await build();
     notifyReload();
   } catch (err) {
     console.error('Build failed:', err.message);

@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 const { marked } = require('marked');
+const sharp = require('sharp');
 const { renderHome, renderBlogIndex, renderFavorites, renderPost } = require('./templates/layout');
+
+const THUMBNAIL_WIDTH = 800;
+const THUMBNAIL_QUALITY = 80;
 
 const ROOT = __dirname;
 const CONTENT_DIR = path.join(ROOT, 'content');
@@ -63,9 +67,38 @@ function copyDir(src, dest) {
 
 // A bare filename (no leading "/") resolves against that post's own image
 // folder, e.g. `thumbnail: foo.png` on the "my-post" post -> /images/my-post/foo.png
-function resolveThumbnail(thumbnail, slug) {
+function resolveThumbnailSource(thumbnail, slug) {
   if (!thumbnail) return null;
   return thumbnail.startsWith('/') ? thumbnail : `/images/${slug}/${thumbnail}`;
+}
+
+// e.g. /images/my-post/foo.png -> /images/my-post/foo-thumb.webp
+// A separate filename so the same source image can also be used at full
+// quality inline in the post body without being affected.
+function thumbnailOutputPath(sourcePath) {
+  const { dir, name } = path.parse(sourcePath);
+  return `${dir}/${name}-thumb.webp`;
+}
+
+// Resizes+recompresses each post's thumbnail into dist/ as WebP, and points
+// post.thumbnail at the compressed version. Leaves public/images/ untouched.
+async function generateThumbnails(posts) {
+  for (const post of posts) {
+    if (!post.thumbnail) continue;
+
+    const sourceFile = path.join(PUBLIC_DIR, post.thumbnail);
+    const outputPath = thumbnailOutputPath(post.thumbnail);
+    const outputFile = path.join(DIST_DIR, outputPath);
+
+    fs.mkdirSync(path.dirname(outputFile), { recursive: true });
+    await sharp(sourceFile)
+      .rotate() // auto-orient using the source's EXIF Orientation tag before resizing
+      .resize({ width: THUMBNAIL_WIDTH, withoutEnlargement: true })
+      .webp({ quality: THUMBNAIL_QUALITY })
+      .toFile(outputFile);
+
+    post.thumbnail = outputPath;
+  }
 }
 
 function loadPosts() {
@@ -86,7 +119,7 @@ function loadPosts() {
       title: data.title,
       date: data.date,
       description: data.description || '',
-      thumbnail: resolveThumbnail(data.thumbnail, slug),
+      thumbnail: resolveThumbnailSource(data.thumbnail, slug),
       contentHtml: renderMarkdown(content),
     };
   });
@@ -124,12 +157,18 @@ function writeFile(destPath, contents) {
   fs.writeFileSync(destPath, contents);
 }
 
-function build() {
+async function build() {
   fs.rmSync(DIST_DIR, { recursive: true, force: true });
 
   const posts = loadPosts();
   const { introHtml, featuredSlugs } = loadHome();
   const featuredPosts = resolveFeaturedPosts(featuredSlugs, posts);
+
+  if (fs.existsSync(PUBLIC_DIR)) {
+    copyDir(PUBLIC_DIR, DIST_DIR);
+  }
+
+  await generateThumbnails(posts);
 
   writeFile(path.join(DIST_DIR, 'index.html'), renderHome({ introHtml, posts, featuredPosts }));
   writeFile(path.join(DIST_DIR, 'blog', 'index.html'), renderBlogIndex({ posts }));
@@ -139,15 +178,14 @@ function build() {
     writeFile(path.join(DIST_DIR, 'blog', post.slug, 'index.html'), renderPost({ post }));
   }
 
-  if (fs.existsSync(PUBLIC_DIR)) {
-    copyDir(PUBLIC_DIR, DIST_DIR);
-  }
-
   console.log(`Built ${posts.length} post(s) to ${path.relative(ROOT, DIST_DIR)}/`);
 }
 
 module.exports = { build };
 
 if (require.main === module) {
-  build();
+  build().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

@@ -2,7 +2,7 @@
 title: "Mini Cyberdeck Project Proposal"
 date: 2026-08-04
 description: "Ideation for a small-form DIY portable computer."
-thumbnail: altoids_cyberdeck.png
+thumbnail: spidey.png
 ---
 
 Electronics projects are such a fun way to apply the engineering skills I learned during my computer engineering undergrad. I've built a couple small ones over the last year ([Bluetooth Audio Receiver](/blog/esp32-bluetooth-audio/), [Simple Analog Synth](/blog/basic-breadboard-synth/)). I wanted to start a larger project (potentially with friends) and so I needed to evaluate what I enjoyed about engineering projects:
