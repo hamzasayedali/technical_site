@@ -107,3 +107,9 @@ The total cost with equipment would probably end up around ~$100, but the actual
 I wrote this blog post because I am excited about the project idea, but it also isn't the best project for everyone. For one, it's pretty general purpose, but if you only really are excited by a specific field, robotics for example, it might be more enjoyable to just do a straight-up robotics project.
 
 The thing I like about this project though is that it serves as an individually-satisfying project, a cool tool for future projects, and a collaborative project. The bones are the same, a Raspberry Pi, screen, and keyboard, but the ESP32, which allows for direct communication, would let you build all kinds of cool software and hardware with others.
+
+P.S.
+
+The screen came in today:
+
+<img src="/images/cyberdeck-proposal/spidey.png" alt="Diagram" width="600">
