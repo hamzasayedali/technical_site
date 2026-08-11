@@ -9,6 +9,7 @@ title: Favorites
 ## Resources
 
 - [Modern Font Stack](https://modernfontstacks.com/) - Site with standardized font stacks for web development. My site currently uses "Geometric Humanist"
+- [Frutiger Aero Buttons](https://www.figma.com/community/file/1367440762272072166/frutiger-aero-buttons)
 
 ## YouTube Channels
 
